@@ -9,7 +9,7 @@ RUN curl -sSL -O https://get.docker.com/builds/Linux/x86_64/docker-${DOCKER_VERS
     && mv /tmp/docker/* /usr/local/bin
     
 ENV COMPOSE_VERSION 1.11.2
-RUN curl -L https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-Linux-x86_64 > /usr/local/bin/docker-compose \
+RUN curl -sSL https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-Linux-x86_64 > /usr/local/bin/docker-compose \
     && chmod +x /usr/local/bin/docker-compose
 
 ENV TERRAFORM_VERSION 0.8.8
@@ -24,6 +24,10 @@ RUN curl -sSL -O https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_
     && rm packer_${PACKER_VERSION}_linux_amd64.zip \
     && mv packer /usr/local/bin
 
+ENV TERRAFORM_SOFTLAYER 1.4.0
+RUN curl -sSL https://github.com/softlayer/terraform-provider-softlayer/releases/download/${TERRAFORM_SOFTLAYER}/terraform-provider-softlayer_linux_amd64 > /usr/local/bin/terraform-provider-softlayer \
+    && chmod +x /usr/local/bin/terraform-provider-softlayer
+COPY .terraformrc /root/
 
 RUN curl https://glide.sh/get | sh
 
