@@ -29,13 +29,11 @@ RUN curl -sSL https://github.com/softlayer/terraform-provider-softlayer/releases
     && chmod +x /usr/local/bin/terraform-provider-softlayer
 COPY .terraformrc /root/
 
+ENV DEP_VERSION v0.3.2
+RUN curl -sSL https://github.com/golang/dep/releases/download/${DEP_VERSION}/dep-linux-amd64 > /usr/local/bin/dep \
+    && chmod +x /usr/local/bin/dep
 
-ENV GLIDE_VERSION v0.13.0
-RUN curl -sSL https://github.com/Masterminds/glide/releases/download/${GLIDE_VERSION}/glide-${GLIDE_VERSION}-linux-amd64.tar.gz  > glide.tar.gz  \
-    && tar xzfv glide.tar.gz \
-    && mv linux-amd64/glide /usr/local/bin \
-    && rm -rf linux-amd64 && rm -f glide.tar.gz
 
 RUN mkdir -p /go/src/github.com/watson-platform/packer-builder-softlayer && git clone https://github.com/watson-platform/packer-builder-softlayer.git /go/src/github.com/watson-platform/packer-builder-softlayer
-RUN cd /go/src/github.com/watson-platform/packer-builder-softlayer && glide install --strip-vendor && go build -o /usr/local/bin/packer-builder-softlayer main.go
+RUN cd /go/src/github.com/watson-platform/packer-builder-softlayer && dep ensure && go build -o /usr/local/bin/packer-builder-softlayer main.go
 
